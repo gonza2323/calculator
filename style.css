@@ -50,10 +50,12 @@ button {
     background-color: rgb(250, 88, 59);
     color: white;
     font-weight: bold;
+    transition: transform .1s ease-in-out;
 }
 
 button:hover, button:active {
     filter: brightness(70%);
+    transform: translateY(-2px);
 }
 
 .row > div {
