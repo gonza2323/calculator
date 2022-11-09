@@ -54,6 +54,11 @@ function clearEntry() {
 }
 
 function operate(e, operation) {
+    if (currentOp === div && displayValue === 0) {
+        clearAll();
+        display.textContent = 'MATHERROR';
+        return;
+    }
     currentValue = currentOp(currentValue, displayValue);
     display.textContent = currentValue
     if (e.target.textContent !== '=')
