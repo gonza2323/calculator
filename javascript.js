@@ -53,9 +53,11 @@ function clearEntry() {
     display.textContent = displayValue;
 }
 
-function operate(operation) {
+function operate(e, operation) {
     currentValue = currentOp(currentValue, displayValue);
-    display.textContent = currentValue;
+    display.textContent = currentValue
+    if (e.target.textContent !== '=')
+        display.textContent += e.target.textContent;
     currentOp = operation;
     displayValue = 0;
 }
@@ -63,11 +65,11 @@ function operate(operation) {
 numbers.forEach(number => number.addEventListener('click', pressNumber));
 ac.addEventListener('click', clearAll);
 ce.addEventListener('click', clearEntry);
-addButton.addEventListener('click', () => operate(add));
-subButton.addEventListener('click', () => operate(sub));
-prodButton.addEventListener('click', () => operate(prod));
-divButton.addEventListener('click', () => operate(div));
-modButton.addEventListener('click', () => operate(mod));
-equal.addEventListener('click', () => operate(add));
+addButton.addEventListener('click', (e) => operate(e, add));
+subButton.addEventListener('click', (e) => operate(e, sub));
+prodButton.addEventListener('click', (e) => operate(e, prod));
+divButton.addEventListener('click', (e) => operate(e, div));
+modButton.addEventListener('click', (e) => operate(e, mod));
+equal.addEventListener('click', (e) => operate(e, add));
 
 display.textContent = displayValue;
