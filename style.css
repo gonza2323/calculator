@@ -1,0 +1,80 @@
+@font-face { font-family: seven-segment; src: url('seven-segment.ttf'); }
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: seven-segment, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: gray;
+}
+
+.calculator {
+    width: 150px;
+    font-size: 20pt;
+    background-color: rgb(48, 48, 48);
+    padding: 20px 10px;
+    border-radius: 10px;
+}
+
+.display {
+    padding: 10px 5px;
+    font-family: seven-segment;
+    background-color: rgb(56, 119, 37);
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.row {
+    display: flex;
+    margin: 5px 0 0 0;
+    gap: 5px;
+}
+
+.row > * {
+    flex: 1;
+}
+
+button {
+    padding: 0;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: rgb(250, 88, 59);
+    color: white;
+    font-weight: bold;
+}
+
+button:hover, button:active {
+    filter: brightness(70%);
+}
+
+.row > div {
+    display: flex;
+    gap: 5px;
+}
+
+.row > div > * {
+    flex: 1;
+}
+
+.number, .decimal {
+    background-color: aliceblue;
+    color: black;
+}
+
+.ac {
+    background-color: rgb(185, 27, 27);
+}
+
+.ce {
+    background-color: rgb(255, 220, 24);
+    color: black;
+}
