@@ -15,7 +15,7 @@ const decimal = document.querySelector('.decimal');
 let currentValue = 0;
 let displayValue = 0;
 let currentOp = equal;
-let awaitingArgument = true;
+let awaitingArgument = false;
 let displayErase = false;
 
 
@@ -67,8 +67,10 @@ function addDecimal() {
 function clearAll() {
     currentValue = 0;
     displayValue = 0;
-    currentOp = equal;
     display.textContent = displayValue;
+    currentOp = equal;
+    awaitingArgument =false;
+    displayErase = true;
 }
 
 function clearEntry() {
@@ -79,13 +81,19 @@ function clearEntry() {
 function operate(e, operation) {
     if (awaitingArgument) {
         clearAll();
-        display.textContent = 'Missing Arg';
+        display.textContent = 'Error';
         return;
     }
 
-    currentValue = currentOp(currentValue, displayValue);
-    displayValue = currentValue;
+    if (currentOp === div && displayValue === 0) {
+        clearAll();
+        display.textContent = 'Divide by 0';
+        return;
+    }
+
+    displayValue = currentOp(currentValue, displayValue);
     display.textContent = displayValue;
+    currentValue = displayValue;
     
     currentOp = operation;
     
@@ -99,12 +107,12 @@ function operate(e, operation) {
 numbers.forEach(number => number.addEventListener('click', pressNumber));
 ac.addEventListener('click', clearAll);
 ce.addEventListener('click', clearEntry);
-addButton.addEventListener('click', (e) => operate(e, add));
-subButton.addEventListener('click', (e) => operate(e, sub));
-prodButton.addEventListener('click', (e) => operate(e, prod));
-divButton.addEventListener('click', (e) => operate(e, div));
-modButton.addEventListener('click', (e) => operate(e, mod));
-equalButton.addEventListener('click', (e) => operate(e, equal));
+addButton.addEventListener('click', e => operate(e, add));
+subButton.addEventListener('click', e => operate(e, sub));
+prodButton.addEventListener('click', e => operate(e, prod));
+divButton.addEventListener('click', e => operate(e, div));
+modButton.addEventListener('click', e => operate(e, mod));
+equalButton.addEventListener('click', e => operate(e, equal));
 decimal.addEventListener('click', addDecimal);
 
 display.textContent = displayValue;
