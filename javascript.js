@@ -81,35 +81,40 @@ function clearAll() {
     displayValue = 0;
     display.textContent = displayValue;
     currentOp = equal;
-    awaitingArgument =false;
+    awaitingArgument = false;
     displayErase = true;
 }
 
 function clearEntry() {
     displayValue = 0;
     display.textContent = displayValue;
+    awaitingArgument = false;
 }
 
 function operate(e, operation) {
     if (awaitingArgument) {
         clearAll();
         display.textContent = 'Error';
+        awaitingArgument = true;
         return;
     }
+
+    displayValue = Number(display.textContent);
 
     if (currentOp === div && displayValue === 0) {
         clearAll();
         display.textContent = 'Error ÷ by 0';
+        awaitingArgument = true;
         return;
     }
-    
-    displayValue = Number(display.textContent);
+
     displayValue = Number(currentOp(currentValue, displayValue).toPrecision(11));
     
     const maxLength = displayValue.toString().includes('.') ? 12 : 11;
     if (displayValue.toString().length > maxLength) {
         clearAll();
         display.textContent = "TOO BIG";
+        awaitingArgument = true;
         return;
     }
 
@@ -125,6 +130,52 @@ function operate(e, operation) {
     displayErase = true;
 }
 
+function pressKey(e) {
+    const key = e.key;
+    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8','9'];
+    console.log(key);
+    if (numbers.includes(key)) {
+        pressNumber({target: {textContent: key}});
+        return;
+    }
+    if (key === '.') {
+        addDecimal();
+        return;
+    }
+    if (key === '+') {
+        operate({target: {textContent: '+'}}, add);
+        return;
+    }
+    if (key === '-') {
+        operate({target: {textContent: '-'}}, sub);
+        return;
+    }
+    if (key === '*') {
+        operate({target: {textContent: '×'}}, prod);
+        return;
+    }
+    if (key === '/') {
+        operate({target: {textContent: '÷'}}, div);
+        return;
+    }
+    if (key === '%') {
+        operate({target: {textContent: '%'}}, mod);
+        return;
+    }
+    if (key === '=' || key === 'Enter') {
+        operate({target: {textContent: '='}}, equal);
+        return;
+    }
+    if (key === 'c' || key === 'Backspace') {
+        clearEntry();
+        return;
+    }
+    if (key === 'Escape') {
+        clearAll();
+        return;
+    }
+}
+
 numbers.forEach(number => number.addEventListener('click', pressNumber));
 ac.addEventListener('click', clearAll);
 ce.addEventListener('click', clearEntry);
@@ -135,5 +186,7 @@ divButton.addEventListener('click', e => operate(e, div));
 modButton.addEventListener('click', e => operate(e, mod));
 equalButton.addEventListener('click', e => operate(e, equal));
 decimal.addEventListener('click', addDecimal);
+
+document.addEventListener('keydown', e => pressKey(e));
 
 display.textContent = displayValue;
