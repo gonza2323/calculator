@@ -43,14 +43,26 @@ function equal(a, b) {
     return b;
 }
 
+function writeToDisplay(text) {
+    text = text.toString();
+    const maxLength = text.includes('.') ? 12 : 11;
+    display.textContent = text.substring(0, Math.min(text.length, maxLength));
+}
+
 function pressNumber(e) {
     if (awaitingArgument || displayErase) {
         display.textContent = '';
         displayErase = false;
         awaitingArgument = false;
     }
-    displayValue = Number(display.textContent + e.target.textContent);
-    display.textContent = displayValue;
+    if (display.textContent === '0') {
+        if (e.target.textContent === '0'){
+            return;
+        } else {
+            display.textContent = '';
+        }
+    }
+    writeToDisplay(display.textContent + e.target.textContent);
 }
 
 function addDecimal() {
@@ -61,7 +73,7 @@ function addDecimal() {
         awaitingArgument = false;
     }
     if (display.textContent.includes('.')) return;
-    display.textContent += '.';
+    writeToDisplay(display.textContent += '.');
 }
 
 function clearAll() {
@@ -87,12 +99,21 @@ function operate(e, operation) {
 
     if (currentOp === div && displayValue === 0) {
         clearAll();
-        display.textContent = 'Divide by 0';
+        display.textContent = 'Error ÷ by 0';
+        return;
+    }
+    
+    displayValue = Number(display.textContent);
+    displayValue = Number(currentOp(currentValue, displayValue).toPrecision(11));
+    
+    const maxLength = displayValue.toString().includes('.') ? 12 : 11;
+    if (displayValue.toString().length > maxLength) {
+        clearAll();
+        display.textContent = "TOO BIG";
         return;
     }
 
-    displayValue = currentOp(currentValue, displayValue);
-    display.textContent = displayValue;
+    writeToDisplay(displayValue);
     currentValue = displayValue;
     
     currentOp = operation;
