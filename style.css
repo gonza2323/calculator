@@ -7,7 +7,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    font-family: seven-segment, sans-serif;
+    font-family: monospace, sans-serif;
     height: 100vh;
 }
 
@@ -30,7 +30,6 @@ body {
     box-sizing: content-box;
     width: 12ch;
     padding: .5em .25em;
-    font-family: seven-segment;
     background-color: rgb(56, 119, 37);
     border-radius: .25em;
     margin-bottom: .5em;
