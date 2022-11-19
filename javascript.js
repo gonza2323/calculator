@@ -12,36 +12,42 @@ const modButton = document.querySelector('.mod');
 const equalButton = document.querySelector('.equal');
 const decimal = document.querySelector('.decimal');
 
+const operations = {
+    add: (a, b) => {
+        return a + b;
+    },
+    sub: (a, b) => {
+        return a - b;
+    },
+    prod: (a, b) => {
+        return a * b;
+    },
+    div: (a, b) => {
+        return a / b;
+    },
+    mod: (a, b) => {
+        return a % b;
+    },
+    equal: (a, b) => {
+        return b;
+    }
+}
+
+operations.add.symbol = '+';
+operations.sub.symbol = '-';
+operations.prod.symbol = '×';
+operations.div.symbol = '÷';
+operations.mod.symbol = '%';
+operations.equal.symbol = '';
+
 let currentValue = 0;
 let displayValue = 0;
-let currentOp = equal;
+let currentOp = operations.equal;
 let awaitingArgument = false;
 let displayErase = false;
 
 
-function add(a, b) {
-    return a + b;
-}
 
-function sub(a, b) {
-    return a - b;
-}
-
-function prod(a, b) {
-    return a * b;
-}
-
-function div(a, b) {
-    return a / b;
-}
-
-function mod(a, b) {
-    return a % b;
-}
-
-function equal(a, b) {
-    return b;
-}
 
 function writeToDisplay(text) {
     text = text.toString();
@@ -80,7 +86,7 @@ function clearAll() {
     currentValue = 0;
     displayValue = 0;
     display.textContent = displayValue;
-    currentOp = equal;
+    currentOp = operations.equal;
     awaitingArgument = false;
     displayErase = true;
 }
@@ -91,17 +97,19 @@ function clearEntry() {
     awaitingArgument = false;
 }
 
-function operate(e, operation) {
+function operate(operation) {
     if (awaitingArgument) {
-        clearAll();
-        display.textContent = 'Error';
-        awaitingArgument = true;
+        if (currentOp != operations.equal) {
+            display.textContent = display.textContent.slice(0, -1);
+        }
+        display.textContent += operation.symbol;
+        currentOp = operation;
         return;
     }
 
     displayValue = Number(display.textContent);
 
-    if (currentOp === div && displayValue === 0) {
+    if (currentOp === operations.div && displayValue === 0) {
         clearAll();
         display.textContent = 'Error ÷ by 0';
         awaitingArgument = true;
@@ -123,17 +131,17 @@ function operate(e, operation) {
     
     currentOp = operation;
     
-    if (currentOp !== equal) {
+    if (currentOp !== operations.equal) {
         awaitingArgument = true;
-        display.textContent += e.target.textContent;
     }
+    
+    display.textContent += operation.symbol;
     displayErase = true;
 }
 
 function pressKey(e) {
     const key = e.key;
-    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8','9'];
-    console.log(key);
+    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     if (numbers.includes(key)) {
         pressNumber({target: {textContent: key}});
         return;
@@ -143,27 +151,27 @@ function pressKey(e) {
         return;
     }
     if (key === '+') {
-        operate({target: {textContent: '+'}}, add);
+        operate(operations.add);
         return;
     }
     if (key === '-') {
-        operate({target: {textContent: '-'}}, sub);
+        operate(operations.sub);
         return;
     }
     if (key === '*') {
-        operate({target: {textContent: '×'}}, prod);
+        operate(operations.prod);
         return;
     }
     if (key === '/') {
-        operate({target: {textContent: '÷'}}, div);
+        operate(operations.div);
         return;
     }
     if (key === '%') {
-        operate({target: {textContent: '%'}}, mod);
+        operate(operations.mod);
         return;
     }
     if (key === '=' || key === 'Enter') {
-        operate({target: {textContent: '='}}, equal);
+        operate(operations.equal);
         return;
     }
     if (key === 'c' || key === 'Backspace') {
@@ -179,12 +187,12 @@ function pressKey(e) {
 numbers.forEach(number => number.addEventListener('click', pressNumber));
 ac.addEventListener('click', clearAll);
 ce.addEventListener('click', clearEntry);
-addButton.addEventListener('click', e => operate(e, add));
-subButton.addEventListener('click', e => operate(e, sub));
-prodButton.addEventListener('click', e => operate(e, prod));
-divButton.addEventListener('click', e => operate(e, div));
-modButton.addEventListener('click', e => operate(e, mod));
-equalButton.addEventListener('click', e => operate(e, equal));
+addButton.addEventListener('click', () => operate(operations.add));
+subButton.addEventListener('click', () => operate(operations.sub));
+prodButton.addEventListener('click', () => operate(operations.prod));
+divButton.addEventListener('click', () => operate(operations.div));
+modButton.addEventListener('click', () => operate(operations.mod));
+equalButton.addEventListener('click', () => operate(operations.equal));
 decimal.addEventListener('click', addDecimal);
 
 document.addEventListener('keydown', e => pressKey(e));
