@@ -102,8 +102,10 @@ function operate(operation) {
         if (currentOp != operations.equal) {
             display.textContent = display.textContent.slice(0, -1);
         }
-        display.textContent += operation.symbol;
-        currentOp = operation;
+        if (Number(display.textContent)) {
+            display.textContent += operation.symbol;
+            currentOp = operation;
+        }
         return;
     }
 
