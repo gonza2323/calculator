@@ -33,14 +33,17 @@ body {
     margin-bottom: .5em;
 }
 
-.row {
+.flex {
     display: flex;
-    margin-top: .25em;
     gap: .1em;
 }
 
-.row > * {
+.flex > * {
     flex: 1;
+}
+
+.row {
+    margin-top: .25em;
 }
 
 button {
@@ -57,15 +60,6 @@ button {
 button:hover, button:active {
     filter: brightness(70%);
     transform: translateY(-.05em);
-}
-
-.row > div {
-    display: flex;
-    gap: .1em;
-}
-
-.row > div > * {
-    flex: 1;
 }
 
 .number, .decimal {
